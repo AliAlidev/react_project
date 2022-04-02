@@ -3,6 +3,10 @@
     react destinguish between built in tags and custome tags by syntax capitalize first charachter
 */
 
+import { useState } from "react";
+import Backdrop from "./Backdrop";
+import Modal from "./Modal";
+
 /*
     in order to pass values to component we use prop concept here prop is a javascript object contain
     every attributes added to component when we call it
@@ -31,10 +35,35 @@
         component body 
  */
 
+/*
+  react conatin built in state called state which allow us to switch app cases we need it to show modal when click button and close it when we
+  click confirm or cancel to use stat first we should add useState inside component directly
+  useState we can deal with it as afunction returning two variables the first one is the current state and the second
+  is a function to set the model state
+  after that we add condition to render modal section we can use two syntax first
+  {isModelOpen ? <Modal /> : null}
+  or
+  {isModelOpen && <Modal />}
+
+  in order to close model whe click on cancel or confirm we define handler for this buttons and pass ot's name
+  to Modal component as onClick event after that inside Modal component we add attribute for cancel button 
+  which is onClick and assign it with the function name passed with props
+
+*/
+
 function Todo(props) {
+  // user state
+  // set current state to not rendered
+  // useState is react hooks
+  const [isModelOpen, setModalOpen] = useState(false);
+
   // name convenient delectHandler
   function delectHandler() {
-    console.log(props.text);
+    setModalOpen(true);
+  }
+
+  function cancelHandler() {
+    setModalOpen(false);
   }
 
   return (
@@ -44,6 +73,13 @@ function Todo(props) {
         <button className="btn" onClick={delectHandler}>
           Delete
         </button>
+        {isModelOpen && (
+          /*
+            here we can define any proprty because it is a custome component
+          */
+          <Modal cancelHandler={cancelHandler} confirmHandler={cancelHandler} />
+        )}
+        {isModelOpen && <Backdrop cancelHandler={cancelHandler} />}
       </div>
     </div>
   );
